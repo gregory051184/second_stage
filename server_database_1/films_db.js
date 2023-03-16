@@ -8,7 +8,7 @@ const pool = new Pool({
     password: 'postgres',
     host: 'localhost',
     port: 5432,
-    database: 'cinema_2'
+    database: 'film_1'
 });
 
 export default pool;
