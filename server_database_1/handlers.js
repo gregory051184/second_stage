@@ -99,7 +99,7 @@ export const update_genre = async (req, res) => {
 
 export const delete_genre = async (req, res) => {
     const genre_id = req.params['genre_id'];
-    const new_genre = await db.query('DELETE * FROM genre WHERE genre_id = $1 RETURNING*', [genre_id]);
+    const new_genre = await db.query('DELETE FROM genre WHERE genre_id = $1 RETURNING*', [genre_id]);
     res.send(new_genre);
 };
 
@@ -246,7 +246,7 @@ export const update_person = async (req, res) => {
 
 export const delete_person = async (req, res) => {
     const person_id = req.params['person_id'];
-    const person = await db.query('DELETE * FROM person WHERE person_id = $1', [person_id]);
+    const person = await db.query('DELETE FROM person WHERE person_id = $1', [person_id]);
     res.send(person);
 };
 
@@ -419,7 +419,7 @@ export const update_film = async (req, res) => {
 
 export const delete_film = async (req, res) => {
     const film_id = req.params['film_id'];
-    const film = await db.query('DELETE * FROM film WHERE film_id = $1', [film_id]);
+    const film = await db.query('DELETE FROM film WHERE film_id = $1', [film_id]);
     res.send(film);
 };
 
@@ -468,7 +468,7 @@ export const update_country = async (req, res) => {
 
 export const delete_country = async (req, res) => {
     const country_id = req.params['country_id'];
-    const country = await db.query('DELETE * FROM country WHERE country_id = $1 RETURNING*',
+    const country = await db.query('DELETE FROM country WHERE country_id = $1 RETURNING*',
         [country_id]);
     res.send(country);
 };
@@ -560,7 +560,7 @@ export const update_profession = async (req, res) => {
 
 export const delete_profession = async (req, res) => {
     const profession_id = req.params['profession_id'];
-    const profession = await db.query('DELETE * FROM profession WHERE profession_id = $1 RETURNING*',
+    const profession = await db.query('DELETE FROM profession WHERE profession_id = $1 RETURNING*',
         [profession_id]);
     res.send(profession);
 };
@@ -597,7 +597,7 @@ export const update_subtitles = async (req, res) => {
 
 export const delete_subtitles = async (req, res) => {
     const subtitles_id = req.params['subtitles_id'];
-    const subtitles = await db.query('DELETE * FROM subtitles WHERE subtitles_id = $1 RETURNING*',
+    const subtitles = await db.query('DELETE FROM subtitles WHERE subtitles_id = $1 RETURNING*',
         [subtitles_id]);
     res.send(subtitles);
 };
@@ -634,7 +634,7 @@ export const update_translation = async (req, res) => {
 
 export const delete_translation = async (req, res) => {
     const translation_id = req.params['translation_id'];
-    const translation = await db.query('DELETE * FROM translation WHERE translation_id = $1 RETURNING*',
+    const translation = await db.query('DELETE FROM translation WHERE translation_id = $1 RETURNING*',
         [translation_id]);
     res.send(translation);
 };
@@ -671,7 +671,7 @@ export const update_video_quality = async (req, res) => {
 
 export const delete_video_quality = async (req, res) => {
     const video_quality_id = req.params['video_quality_id'];
-    const video_quality = await db.query('DELETE * FROM video_quality WHERE video_quality_id = $1 RETURNING*',
+    const video_quality = await db.query('DELETE FROM video_quality WHERE video_quality_id = $1 RETURNING*',
         [video_quality_id]);
     res.send(video_quality);
 };
@@ -708,7 +708,7 @@ export const update_age_restriction = async (req, res) => {
 
 export const delete_age_restriction = async (req, res) => {
     const age_restriction_id = req.params['age_restriction_id'];
-    const age_restriction = await db.query('DELETE * FROM age_restriction WHERE age_restriction_id = $1 RETURNING*',
+    const age_restriction = await db.query('DELETE FROM age_restriction WHERE age_restriction_id = $1 RETURNING*',
         [age_restriction_id]);
     res.send(age_restriction);
 };
@@ -746,7 +746,7 @@ export const update_mpaa_rating = async (req, res) => {
 
 export const delete_mpaa_rating = async (req, res) => {
     const mpaa_rating_id = req.params['mpaa_rating_id'];
-    const mpaa_rating = await db.query('DELETE * FROM mpaa_rating WHERE mpaa_rating_id = $1 RETURNING*',
+    const mpaa_rating = await db.query('DELETE FROM mpaa_rating WHERE mpaa_rating_id = $1 RETURNING*',
         [mpaa_rating_id]);
     res.send(mpaa_rating);
 };
