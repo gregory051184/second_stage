@@ -200,7 +200,7 @@ export const create_person = async (req, res) => {
         ' $8, $9, $10) RETURNING*', [first_name, second_name, height, date_of_birth, place_of_birth, spouse,
         all_films_count, best_films, best_serials, image]);
     try {
-        if (genres.length > 0) {
+        if (genres && genres.length > 0) {
             await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
                 [second_name, first_name]).then(data => {
                 genres.forEach(g => {
@@ -208,7 +208,7 @@ export const create_person = async (req, res) => {
                         g.toString()])
                 })
             })
-        } else if (films.length > 0) {
+        } else if (films && films.length > 0) {
             await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
                 [second_name, first_name]).then(data => {
                 films.forEach(film => {
@@ -217,7 +217,7 @@ export const create_person = async (req, res) => {
                 })
             })
         }
-        if (professions.length > 0) {
+        if (professions && professions.length > 0) {
             await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
                 [second_name, first_name]).then(data => {
                 professions.forEach(prof => {
@@ -367,7 +367,7 @@ export const create_film = async (req, res) => {
             usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world, release_on_dvd,
             fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image]);
     try {
-        if (genres.length > 0) {
+        if (genres && genres.length > 0) {
             await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
                 [name, eng_title]).then(data => {
                 genres.forEach(g => {
@@ -375,7 +375,7 @@ export const create_film = async (req, res) => {
                         g.toString()])
                 })
             })
-        } else if (persons.length > 0) {
+        } else if (persons && persons.length > 0) {
             await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
                 [name, eng_title]).then(data => {
                 persons.forEach(person => {
@@ -384,7 +384,7 @@ export const create_film = async (req, res) => {
                 })
             })
         }
-        if (countries.length > 0) {
+        if (countries && countries.length > 0) {
             await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
                 [name, eng_title]).then(data => {
                 countries.forEach(country => {
