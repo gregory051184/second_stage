@@ -57,7 +57,7 @@ import {
     update_mpaa_rating,
     delete_mpaa_rating, create_film_country, create_film_actor, create_film_dubbing_actor, create_film_genre
 } from "./handlers.js";
-import {headers_middleware, url_middleware} from "./middlewares/middleware.js";
+import {headers_middleware, url_middleware} from "./middleware.js";
 import dotenv from "dotenv"
 
 const app = new Application();
