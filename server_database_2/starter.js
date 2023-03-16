@@ -1,5 +1,5 @@
-import {Router} from "./second_stage/router.js";
-import {Application} from "./second_stage/application.js";
+import {Router} from "./router.js";
+import {Application} from "./application.js";
 import {
     create_film,
     create_genre,
@@ -56,8 +56,8 @@ import {
     create_mpaa_rating,
     update_mpaa_rating,
     delete_mpaa_rating, create_film_country, create_film_actor, create_film_dubbing_actor, create_film_genre
-} from "./second_stage/handlers.js";
-import {headers_middleware, url_middleware} from "./second_stage/middlewares/middleware.js";
+} from "./handlers.js";
+import {headers_middleware, url_middleware} from "./middlewares/middleware.js";
 import dotenv from "dotenv"
 
 const app = new Application();
