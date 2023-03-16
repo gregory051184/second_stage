@@ -57,7 +57,7 @@ import {
     create_mpaa_rating,
     update_mpaa_rating, delete_mpaa_rating
 } from "./handlers.js";
-import {headers_middleware, url_middleware} from "./middlewares/middleware.js";
+import {headers_middleware, url_middleware} from "./middleware.js";
 
 const app = new Application();
 const router = new Router();
