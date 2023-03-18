@@ -14,7 +14,7 @@ title VARCHAR(50) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS subtitles(
-film_subtitles_id SERIAL PRIMARY KEY,
+subtitles_id SERIAL PRIMARY KEY,
 title VARCHAR(50) NOT NULL
 );
 
@@ -102,7 +102,7 @@ fk_age_restrictions INTEGER REFERENCES age_restriction(age_restriction_id) NOT N
 fk_mpaa_rating INTEGER REFERENCES mpaa_rating(mpaa_rating_id) NOT NULL,
 duration INTEGER NOT NULL,
 translations INTEGER REFERENCES translation(translation_id),
-fk_subtitles INTEGER REFERENCES film_subtitles(film_subtitles_id) NOT NULL,
+fk_subtitles INTEGER REFERENCES subtitles(subtitles_id) NOT NULL,
 fk_video_quality INTEGER REFERENCES video_quality(video_quality_id) NOT NULL,
 image TEXT NOT NULL
 );
