@@ -350,21 +350,21 @@ export const create_film = async (req, res) => {
     const persons = req.body['persons'];
     const countries = req.body['countries'];
     const {
-        name, eng_title, film_description, year_of_production, slogan, budget, marketing,
-        usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world, release_on_dvd,
+        name, eng_title, production_country, film_description, year_of_production, slogan, budget, marketing,
+        usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd,
         fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image
     } = req.body;
     const film = await db.query(`SELECT COUNT(*) FROM film WHERE name = $1`, [name]);
     if(film.rows[0]['count'] > 0){
         res.end('Такой фильм уже существует');
     }
-    const new_film = await db.query('INSERT INTO film(name, eng_title, film_description, year_of_production,' +
-        ' slogan, budget, marketing, ' +
-        ' usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world, release_on_dvd, ' +
+    const new_film = await db.query('INSERT INTO film(name, eng_title, production_country, film_description,' +
+        ' year_of_production, slogan, budget, marketing, ' +
+        ' usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd, ' +
         ' fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image) ' +
         ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14, $15, $16, $17, $18, $19, $20) RETURNING*',
-        [name, eng_title, film_description, year_of_production, slogan, budget, marketing,
-            usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world, release_on_dvd,
+        [name, eng_title, production_country, film_description, year_of_production, slogan, budget, marketing,
+            usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd,
             fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image]);
     try {
         if (genres && genres.length > 0) {
@@ -401,17 +401,18 @@ export const create_film = async (req, res) => {
 
 export const update_film = async (req, res) => {
     const {
-        film_id, title, eng_title, film_description, year_of_production, slogan, budget, marketing,
-        usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world, release_on_dvd,
+        film_id, name, eng_title, production_country, film_description, year_of_production, slogan, budget, marketing,
+        usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd,
         fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image
     } = req.body;
-    const new_film = await db.query('UPDATE film SET title = $2, eng_title = $3, film_description = $4,' +
-        ' year_of_production = $5, slogan = $6,budget = $14, marketing = $15, usa_fees = $16, other_world_fees = $17,' +
-        ' audience = $18,premiere_in_russia = $19, premiere_in_world = $20, release_on_dvd = $21,' +
-        ' fk_age_restrictions = $22,' +
-        ' fk_mpaa_rating = $23, duration = $24, translations = $25, fk_subtitles = $26, fk_video_quality = $27,' +
-        ' image = $28 WHERE film_id = $1 RETURNING*', [film_id, title, eng_title, film_description, year_of_production,
-        slogan, budget, marketing, usa_fees, other_world_fees, audience, premiere_in_russia, premiere_in_world,
+    const new_film = await db.query('UPDATE film SET name = $2, eng_title = $3, production_country = $4, ' +
+        ' film_description = $5,' +
+        ' year_of_production = $6, slogan = $7, budget = $8, marketing = $9, usa_fees = $10, other_world_fees = $11,' +
+        ' premiere_in_russia = $12, premiere_in_world = $13, release_on_dvd = $14,' +
+        ' fk_age_restrictions = $15,' +
+        ' fk_mpaa_rating = $16, duration = $17, translations = $18, fk_subtitles = $19, fk_video_quality = $20,' +
+        ' image = $21 WHERE film_id = $1 RETURNING*', [film_id, name, eng_title, production_country, film_description,
+        year_of_production, slogan, budget, marketing, usa_fees, other_world_fees, premiere_in_russia, premiere_in_world,
         release_on_dvd, fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles,
         fk_video_quality, image]);
     res.send(new_film);
