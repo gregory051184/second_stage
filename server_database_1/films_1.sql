@@ -33,6 +33,7 @@ CREATE TABLE IF NOT EXISTS film(
 film_id SERIAL PRIMARY KEY,
 name TEXT NOT NULL,
 eng_title TEXT NOT NULL,
+production_country VARCHAR(150) NOT NULL,  
 film_description TEXT NOT NULL,
 year_of_production VARCHAR(150) NOT NULL,
 slogan TEXT NOT NULL,
