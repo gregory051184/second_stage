@@ -35,7 +35,7 @@ pool.query(`CREATE DATABASE ${process.env.DATABASE}`)
         );
 
         CREATE TABLE IF NOT EXISTS subtitles(
-        film_subtitles_id SERIAL PRIMARY KEY,
+        subtitles_id SERIAL PRIMARY KEY,
         title VARCHAR(50) NOT NULL
         );
         
