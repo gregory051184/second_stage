@@ -124,7 +124,7 @@ pool.query(`CREATE DATABASE ${process.env.DATABASE}`)
         fk_mpaa_rating INTEGER REFERENCES mpaa_rating(mpaa_rating_id) NOT NULL,
         duration INTEGER NOT NULL,
         translations INTEGER REFERENCES translation(translation_id),
-        fk_subtitles INTEGER REFERENCES film_subtitles(film_subtitles_id) NOT NULL,
+        fk_subtitles INTEGER REFERENCES subtitles(subtitles_id) NOT NULL,
         fk_video_quality INTEGER REFERENCES video_quality(video_quality_id) NOT NULL,
         image TEXT NOT NULL
         );
