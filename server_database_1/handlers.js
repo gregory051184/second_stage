@@ -85,9 +85,10 @@ export const create_genre = async (req, res) => {
     const genre = await db.query(`SELECT COUNT(*) FROM genre WHERE title = $1`, [title]);
     if(genre.rows[0]['count'] > 0){
         res.end('Такой жанр уже существует');
+    }else {
+        const new_genre = await db.query('INSERT INTO genre(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_genre);
     }
-    const new_genre = await db.query('INSERT INTO genre(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_genre);
 
 };
 
@@ -194,42 +195,43 @@ export const create_person = async (req, res) => {
         [second_name, first_name]);
     if(person.rows[0]['count'] > 0){
         res.end('Такой человек уже существует');
-    }
-    const new_person = await db.query('INSERT INTO person(first_name, second_name, height, date_of_birth,' +
-        ' place_of_birth, spouse, all_films_count, best_films, best_serials, image) VALUES ($1, $2, $3, $4, $5, $6, $7,' +
-        ' $8, $9, $10) RETURNING*', [first_name, second_name, height, date_of_birth, place_of_birth, spouse,
-        all_films_count, best_films, best_serials, image]);
-    try {
-        if (genres && genres.length > 0) {
-            await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
-                [second_name, first_name]).then(data => {
-                genres.forEach(g => {
-                    db.query(`INSERT INTO person_genre VALUES ($1, $2)`, [data.rows[0]['person_id'].toString(),
-                        g.toString()])
+    }else {
+        const new_person = await db.query('INSERT INTO person(first_name, second_name, height, date_of_birth,' +
+            ' place_of_birth, spouse, all_films_count, best_films, best_serials, image) VALUES ($1, $2, $3, $4, $5, $6, $7,' +
+            ' $8, $9, $10) RETURNING*', [first_name, second_name, height, date_of_birth, place_of_birth, spouse,
+            all_films_count, best_films, best_serials, image]);
+        try {
+            if (genres && genres.length > 0) {
+                await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
+                    [second_name, first_name]).then(data => {
+                    genres.forEach(g => {
+                        db.query(`INSERT INTO person_genre VALUES ($1, $2)`, [data.rows[0]['person_id'].toString(),
+                            g.toString()])
+                    })
                 })
-            })
-        } else if (films && films.length > 0) {
-            await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
-                [second_name, first_name]).then(data => {
-                films.forEach(film => {
-                    db.query(`INSERT INTO film_person VALUES ($1, $2)`, [film.toString(),
-                        data.rows[0]['person_id'].toString()])
+            } else if (films && films.length > 0) {
+                await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
+                    [second_name, first_name]).then(data => {
+                    films.forEach(film => {
+                        db.query(`INSERT INTO film_person VALUES ($1, $2)`, [film.toString(),
+                            data.rows[0]['person_id'].toString()])
+                    })
                 })
-            })
+            }
+            if (professions && professions.length > 0) {
+                await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
+                    [second_name, first_name]).then(data => {
+                    professions.forEach(prof => {
+                        db.query(`INSERT INTO person_professions VALUES ($1, $2)`, [data.rows[0]['person_id'].toString(),
+                            prof.toString()])
+                    })
+                })
+            }
+        } catch {
+            res.send('Что-то пошло не так')
         }
-        if (professions && professions.length > 0) {
-            await db.query(`SELECT person_id FROM person WHERE second_name = $1 AND first_name = $2`,
-                [second_name, first_name]).then(data => {
-                professions.forEach(prof => {
-                    db.query(`INSERT INTO person_professions VALUES ($1, $2)`, [data.rows[0]['person_id'].toString(),
-                        prof.toString()])
-                })
-            })
-        }
-    } catch {
-        res.send('Что-то пошло не так')
+        res.send(new_person);
     }
-    res.send(new_person);
 };
 
 export const update_person = async (req, res) => {
@@ -357,46 +359,48 @@ export const create_film = async (req, res) => {
     const film = await db.query(`SELECT COUNT(*) FROM film WHERE name = $1`, [name]);
     if(film.rows[0]['count'] > 0){
         res.end('Такой фильм уже существует');
-    }
-    const new_film = await db.query('INSERT INTO film(name, eng_title, production_country, film_description,' +
-        ' year_of_production, slogan, budget, marketing, ' +
-        ' usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd, ' +
-        ' fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image) ' +
-        ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14, $15, $16, $17, $18, $19, $20) RETURNING*',
-        [name, eng_title, production_country, film_description, year_of_production, slogan, budget, marketing,
-            usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd,
-            fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image]);
-    try {
-        if (genres && genres.length > 0) {
-            await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
-                [name, eng_title]).then(data => {
-                genres.forEach(g => {
-                    db.query(`INSERT INTO film_genre VALUES ($1, $2)`, [data.rows[0]['film_id'].toString(),
-                        g.toString()])
+    }else {
+        const new_film = await db.query('INSERT INTO film(name, eng_title, production_country, film_description,' +
+            ' year_of_production, slogan, budget, marketing, ' +
+            ' usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd, ' +
+            ' fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image) ' +
+            ' VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13,$14, $15, $16, $17, $18, $19, $20) RETURNING*',
+            [name, eng_title, production_country, film_description, year_of_production, slogan, budget, marketing,
+                usa_fees, other_world_fees, premiere_in_russia, premiere_in_world, release_on_dvd,
+                fk_age_restrictions, fk_mpaa_rating, duration, translations, fk_subtitles, fk_video_quality, image]);
+        try {
+            if (genres && genres.length > 0) {
+                await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
+                    [name, eng_title]).then(data => {
+                    genres.forEach(g => {
+                        db.query(`INSERT INTO film_genre VALUES ($1, $2)`, [data.rows[0]['film_id'].toString(),
+                            g.toString()])
+                    })
                 })
-            })
-        } else if (persons && persons.length > 0) {
-            await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
-                [name, eng_title]).then(data => {
-                persons.forEach(person => {
-                    db.query(`INSERT INTO film_person VALUES ($1, $2)`, [data.rows[0]['film_id'].toString(),
-                        person.toString()])
+            } else if (persons && persons.length > 0) {
+                await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
+                    [name, eng_title]).then(data => {
+                    persons.forEach(person => {
+                        db.query(`INSERT INTO film_person VALUES ($1, $2)`, [data.rows[0]['film_id'].toString(),
+                            person.toString()])
+                    })
                 })
-            })
+            }
+            if (countries && countries.length > 0) {
+                await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
+                    [name, eng_title]).then(data => {
+                    countries.forEach(country => {
+                        db.query(`INSERT INTO film_country VALUES ($1, $2, $3)`, [data.rows[0]['film_id'].toString(),
+                            country[0].toString(), country[1].toString()])
+                    })
+                })
+            }
+        } catch {
+            res.send('Что-то пошло не так');
         }
-        if (countries && countries.length > 0) {
-            await db.query(`SELECT film_id FROM film WHERE name = $1 AND eng_title = $2`,
-                [name, eng_title]).then(data => {
-                countries.forEach(country => {
-                    db.query(`INSERT INTO film_country VALUES ($1, $2, $3)`, [data.rows[0]['film_id'].toString(),
-                        country[0].toString(), country[1].toString()])
-                })
-            })
-        }
-    } catch {
-        res.send('Что-то пошло не так');
+        res.send(new_film);
     }
-    res.send(new_film);
+
 };
 
 export const update_film = async (req, res) => {
@@ -455,9 +459,11 @@ export const create_country = async (req, res) => {
     const country = await db.query(`SELECT COUNT(*) FROM country WHERE title = $1`, [title]);
     if(country.rows[0]['count'] > 0){
         res.end('Такая страна уже существует');
+    }else {
+        const new_country = await db.query('INSERT INTO country(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_country);
     }
-    const new_country = await db.query('INSERT INTO country(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_country);
+
 };
 
 export const update_country = async (req, res) => {
@@ -547,9 +553,11 @@ export const create_profession = async (req, res) => {
     const profession = await db.query(`SELECT COUNT(*) FROM profession WHERE title = $1`, [title]);
     if(profession.rows[0]['count'] > 0){
         res.end('Такая профессия уже существует');
+    }else {
+        const new_profession = await db.query('INSERT INTO profession(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_profession);
     }
-    const new_profession = await db.query('INSERT INTO profession(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_profession);
+
 };
 
 export const update_profession = async (req, res) => {
@@ -584,9 +592,11 @@ export const create_subtitles = async (req, res) => {
     const subtitles = await db.query(`SELECT COUNT(*) FROM subtitles WHERE title = $1`, [title]);
     if(subtitles.rows[0]['count'] > 0){
         res.end('Такие субтитры уже существуют');
+    }else {
+        const new_subtitles = await db.query('INSERT INTO subtitles(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_subtitles);
     }
-    const new_subtitles = await db.query('INSERT INTO subtitles(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_subtitles);
+
 };
 
 export const update_subtitles = async (req, res) => {
@@ -621,9 +631,11 @@ export const create_translation = async (req, res) => {
     const translation = await db.query(`SELECT COUNT(*) FROM translation WHERE title = $1`, [title]);
     if(translation.rows[0]['count'] > 0){
         res.end('Такой язык перевода уже существует');
+    }else {
+        const new_translation = await db.query('INSERT INTO translation(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_translation);
     }
-    const new_translation = await db.query('INSERT INTO translation(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_translation);
+
 };
 
 export const update_translation = async (req, res) => {
@@ -658,9 +670,11 @@ export const create_video_quality = async (req, res) => {
     const video_quality = await db.query(`SELECT COUNT(*) FROM video_quality WHERE title = $1`, [title]);
     if(video_quality.rows[0]['count'] > 0){
         res.end('Такое качество видео уже существует');
+    }else {
+        const new_video_quality = await db.query('INSERT INTO video_quality(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_video_quality);
     }
-    const new_video_quality = await db.query('INSERT INTO video_quality(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_video_quality);
+
 };
 
 export const update_video_quality = async (req, res) => {
@@ -695,9 +709,11 @@ export const create_age_restriction = async (req, res) => {
     const age_restriction = await db.query(`SELECT COUNT(*) FROM age_restriction WHERE title = $1`, [title]);
     if(age_restriction.rows[0]['count'] > 0){
         res.end('Такое ограничение уже существует');
+    }else {
+        const new_age_restriction = await db.query('INSERT INTO age_restriction(title) VALUES ($1) RETURNING*', [title]);
+        res.send(new_age_restriction);
     }
-    const new_age_restriction = await db.query('INSERT INTO age_restriction(title) VALUES ($1) RETURNING*', [title]);
-    res.send(new_age_restriction);
+
 };
 
 export const update_age_restriction = async (req, res) => {
@@ -732,10 +748,12 @@ export const create_mpaa_rating = async (req, res) => {
     const mpaa_rating = await db.query(`SELECT COUNT(*) FROM mpaa_rating WHERE title = $1`, [title]);
     if(mpaa_rating.rows[0]['count'] > 0){
         res.end('Такое ограничение уже существует');
+    }else {
+        const new_mpaa_rating = await db.query('INSERT INTO mpaa_rating(title, description) VALUES ($1, $2)' +
+            ' RETURNING*', [title, description]);
+        res.send(new_mpaa_rating);
     }
-    const new_mpaa_rating = await db.query('INSERT INTO mpaa_rating(title, description) VALUES ($1, $2)' +
-        ' RETURNING*', [title, description]);
-    res.send(new_mpaa_rating);
+
 };
 
 export const update_mpaa_rating = async (req, res) => {
