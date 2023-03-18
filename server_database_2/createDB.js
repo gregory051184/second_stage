@@ -116,7 +116,6 @@ pool.query(`CREATE DATABASE ${process.env.DATABASE}`)
         marketing INTEGER NOT NULL,
         usa_fees INTEGER NOT NULL,
         other_world_fees INTEGER NOT NULL,
-        audience INTEGER NOT NULL,
         premiere_in_russia DATE,
         premiere_in_world DATE NOT NULL,
         release_on_dvd DATE,
