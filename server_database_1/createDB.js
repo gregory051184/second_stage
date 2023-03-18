@@ -56,7 +56,7 @@ pool.query(`CREATE DATABASE ${process.env.DATABASE}`)
         eng_title TEXT NOT NULL,
         production_country VARCHAR(150) NOT NULL,
         film_description TEXT NOT NULL,
-        year_of_production DATE NOT NULL,
+        year_of_production VARCHAR(4) NOT NULL,
         slogan TEXT NOT NULL,
         budget INTEGER NOT NULL,
         marketing INTEGER NOT NULL,
